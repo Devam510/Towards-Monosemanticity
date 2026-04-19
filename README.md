@@ -2,7 +2,7 @@
 
 > **Solving the feature identifiability problem in transformer mechanistic interpretability.**
 
-**[📄 Read the Full Academic Paper (PDF)](./CCJFR_Sparse_Autoencoders.pdf)**
+**[📄 Read the Full Academic Paper (PDF)](./CCJFR_Sparse_Autoencoders_Updated.pdf)**
 
 ---
 
@@ -167,7 +167,7 @@ If a transformer's monosemantic features at layer _l_ are _the_ true building bl
 
 ## Paper
 
-Full paper: [CCJFR_Sparse_Autoencoders.pdf](./CCJFR_Sparse_Autoencoders.pdf)
+Full paper: [CCJFR_Sparse_Autoencoders_Updated.pdf](./CCJFR_Sparse_Autoencoders_Updated.pdf)
 
 This work is a mathematical response to the [Towards Monosemanticity](https://transformer-circuits.pub/2023/monosemantic-features/index.html) paper by Anthropic, successfully addressing the open rotational non-identifiability problem.
 
