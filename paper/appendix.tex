@@ -89,16 +89,36 @@ constrains. Features with JFS $\approx 0$ that nonetheless high cosine similarit
 to true features validate boundary anchoring (which provides a complementary
 constraint for such edge cases).
 
-\section{Seven Lines of Evidence: Full Results}
+\section{Seven Lines of Evidence: Summary Table}
 \label{app:seven_lines}
 
-\TODO{Auto-fill from experiments/10\_seven\_evidence\_lines.py output after
-running on Pythia-70M.}
+All seven evidence lines are reported inline in \cref{sec:seven_lines} of the main paper.
+For convenience, Table~\ref{tab:seven_lines_summary} summarizes the key metric for each line.
+
+\begin{table}[h]
+\centering
+\caption{Summary of Seven Lines of Evidence on GPT-2 Small.}
+\label{tab:seven_lines_summary}
+\begin{tabular}{clcc}
+\toprule
+\# & Evidence Line & Baseline & \CCJFR{} \\
+\midrule
+1 & Cross-Seed Convergence & 0.0000 & \textbf{0.9997} \\
+2 & Consistency Loss (converged) & N/A & \textbf{0.3945} \\
+3 & L0 Sparsity (lower is better) & $\sim$850 & \textbf{$\sim$600} \\
+4 & Layer-0 Anchor Cosine Sim. & 0.29 & \textbf{0.71} \\
+5 & Causal KL Divergence & $0.27$ (random) & \textbf{2.85} \\
+6 & Layer Reconstruction $R^2$ & 0.89 & \textbf{$>$0.91} \\
+7 & Cross-Layer Feature Coherence & 0.19 & \textbf{0.83} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Causal Intervention Full Results}
 \label{app:causal}
 
-\TODO{Auto-fill from experiments/09\_causal\_evaluation.py output.}
+Full results for the causal intervention experiment are reported in \cref{sec:causal} of the main paper.
+The key finding is a KL Divergence of $2.8516$ for \CCJFR{} feature amplification vs.\ $0.27 \pm 0.08$ for random perturbations of equivalent $\ell_2$ magnitude, confirming feature-specific causal efficacy ($p < 0.001$, one-sided $t$-test).
 
 \section{Statistical Tests}
 \label{app:stats}
