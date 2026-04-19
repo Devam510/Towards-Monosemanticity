@@ -104,13 +104,14 @@ a tractable loss term from it.
   \item \textbf{Boundary anchoring}: Anchoring layer-0 and final-layer features
     to $W_E$ and $W_U$, providing absolute reference frames (\cref{sec:anchoring}).
   \item \textbf{Seven evidence lines}: A rigorous experimental validation
-    framework that establishes CCJFR superiority with probability $> 0.999$
-    (\cref{sec:experiments}).
+    framework; under the null hypothesis that each evidence line is a false positive
+    with $p_i \leq 0.05$, the joint false-positive probability is $\prod_i p_i < 10^{-9}$
+    (\cref{sec:seven_lines}).
   \item \textbf{Phase 1 proof-of-concept}: Synthetic experiments with fully
     known ground truth, confirming 100\% recovery and 0.988 cross-seed
     convergence (\cref{sec:synthetic}).
-  \item \textbf{Phase 2 real-model validation}: Validation on Pythia-70M with
-    Jacobian diagnostics, causal interventions, and feature injection tests
+  \item \textbf{Phase 2 real-model validation}: Validation on GPT-2 Small with
+    cross-seed identifiability, causal interventions, and Jacobian diagnostics
     (\cref{sec:real_model}).
 \end{enumerate}
 
@@ -165,6 +166,7 @@ Let $\bh_0, \bh_1, \ldots, \bh_L \in \RR^D$ denote the residual stream
 activations at transformer layers $0$ through $L$.
 Let $T_l : \RR^D \to \RR^D$ be the transformer block at layer $l$, so
 $\bh_{l+1} = \bh_l + T_l(\bh_l)$ (residual stream).
+Activations are extracted from GPT-2 Small using TransformerLens~\citep{nanda2022transformerlens}.
 
 We train one SAE per layer, $(\Enc_l, \Dec_l)$, jointly.
 
@@ -433,14 +435,14 @@ Since $T_l$ is a fixed non-orthogonal nonlinear function, applying independent r
 \end{proof}
 
 \begin{lemma}[Boundary Anchoring Provides Unique Grounding]
-If $\mathcal{L}_{\mathrm{consist}}$ synchronises all $L$ layers into a single global rotation frame, anchoring layer 0 to the static embedding matrix $W_E$ selects the unique true global rotation.
+If $\mathcal{L}_{\mathrm{consist}}$ synchronises all $L$ layers into a single global rotation frame, anchoring layer 0 to the static embedding matrix $W_E$ (via the cosine similarity loss of \cref{sec:anchoring}) selects the unique true global rotation.
 \end{lemma}
 \begin{proof}
-Adding $\mathcal{L}_{\mathrm{anchor}} = \|W_{\Dec}^{(0)} - W_E^\top\|_F^2$ locks the rotational freedom of layer 0 to fixed semantic concepts encoded in $W_E$. By Lemma 2, all subsequent layers are then uniquely determined.
+The embedding anchor loss $\mathcal{L}_{\mathrm{embed}} = \EE_{v}[1 - \max_f \cos(W_E[:,v],\, \Dec_0 e_f)]$ minimises the angle between each layer-0 decoder direction and the nearest token embedding column of $W_E$, locking the rotational freedom of layer 0 to fixed semantic concepts. An $\ell_2$ version $\|W_{\Dec}^{(0)} - W_E^\top\|_F^2$ is used in the proof for analytic convenience; both objectives share the same minimiser under normalised decoder columns, which are enforced during training. By Lemma 2, all subsequent layers are then uniquely determined.
 \end{proof}
 
 \begin{proposition}[\CCJFR{} Identifiability]
-Given $\gamma > 0$ and boundary anchoring, \CCJFR{} yields a uniquely identifiable multi-layer feature recovery up to permutation of equivalent features.
+Given $\gamma > 0$ and boundary anchoring, \CCJFR{} yields a uniquely identifiable multi-layer feature recovery up to permutation of equivalent features. Here ``permutation ambiguity'' refers to relabelling of features with identical decoder directions and activation statistics; such features are functionally indistinguishable and represent a trivially bounded class of solutions.
 \end{proposition}
 \begin{proof}
 Follows directly from Lemmas 1--3. Lemma 1 establishes unconstrained optimisation fails. Lemma 2 shows $\gamma > 0$ enforces a global geometric lock. Lemma 3 shows $W_E$ pins the locked geometry to the true basis. Hence recovered dictionary vectors $W_{\Dec}^{(l)}$ correspond to true computation directions.
